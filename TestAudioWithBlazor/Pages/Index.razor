@@ -1,0 +1,26 @@
+﻿@page "/"
+
+@using TestAudioWithBlazor.Components
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+
+<BlazorAudio Source="https://freetestdata.com/wp-content/uploads/2021/09/Free_Test_Data_100KB_MP3.mp3" @ref=BlazorAudio ></BlazorAudio>
+
+<button type="button" class="btn btn-primary"@onclick="() => BlazorAudio?.PlayAsync()">
+    Play
+</button>
+<button type="button" class="btn btn-primary"@onclick="() => BlazorAudio?.PauseAsync()">
+    Pause
+</button>
+<button type="button" class="btn btn-primary" @onclick="() => BlazorAudio?.StopAsync()">
+    Stop
+</button>
+
+
+@code {
+
+    private BlazorAudio BlazorAudio;
+}

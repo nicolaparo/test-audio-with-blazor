@@ -1,0 +1,30 @@
+﻿@inject IJSRuntime jsRuntime;
+
+<audio controls="@ShowControls" autoplay="@AutoPlay" src="@Source" @ref=audio />
+
+@code {
+
+    [Parameter]
+    public string Source { get; set; }
+
+    [Parameter]
+    public bool AutoPlay { get; set; }
+
+    [Parameter]
+    public bool ShowControls { get; set; }
+
+
+    private ElementReference audio;
+
+    public ValueTask PlayAsync() => jsRuntime.InvokeVoidAsync("audio_play", audio);
+    public ValueTask PauseAsync() => jsRuntime.InvokeVoidAsync("audio_pause", audio);
+    public ValueTask SetTimeAsync(TimeSpan time) => jsRuntime.InvokeVoidAsync("audio_setCurrentTime", audio, time.TotalSeconds);
+    public async ValueTask<TimeSpan> GetTimeAsync(TimeSpan time) => TimeSpan.FromSeconds(await jsRuntime.InvokeAsync<double>("audio_getCurrentTime", audio));
+    public async ValueTask StopAsync()
+    {
+        await PauseAsync();
+        await SetTimeAsync(TimeSpan.Zero);
+    }
+    public async ValueTask<TimeSpan> GetDurationAsync(TimeSpan time) => TimeSpan.FromSeconds(await jsRuntime.InvokeAsync<double>("audio_getDuration", audio));
+
+}
